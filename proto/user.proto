@@ -1,0 +1,30 @@
+syntax = "proto3" ;
+package pb;
+option go_package = ".;pb";
+// Arquivo de configuração do proto buffer
+message User{
+  string id = 1;
+  string name = 2;
+  string email = 3;
+}
+
+message UserResultStream {
+  string status = 1;
+  User user = 2;
+}
+
+message Users {
+  repeated User user = 1;
+}
+
+
+service UserService {
+  // Adiciona um User simples
+  rpc AddUser (User) returns (User);
+  // Vai retornar o Status do user retornando por meio de stream ai server
+  rpc AddUserVerbose(User) returns (stream UserResultStream);
+  // Vai ser enviado vários Users e o server vai retornar uma lista
+  rpc AddUsers(stream User) returns (Users);
+  // Vai enviar um stream de dados e retornar um stream de dados
+  rpc AddUserStreamBoth(stream User) returns (stream UserResultStream );
+}
